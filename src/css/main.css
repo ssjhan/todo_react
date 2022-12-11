@@ -1,0 +1,8 @@
+body{
+  font-family: '궁서', cursive;
+}
+.wrapper{
+  background:skyblue;
+  width: 60%;
+  margin: 50px auto;
+}
