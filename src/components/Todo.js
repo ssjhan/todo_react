@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 //https://mui.com/material-ui/getting-started/learn/
 import {ListItem, ListItemText, 
@@ -7,29 +7,42 @@ import {ListItem, ListItemText,
 import { DeleteOutline } from '@mui/icons-material';
 
 
-const Todo = ({ item, remove }) => {
+const Todo = ({ item, remove, update }) => {
 
     // console.log(item);
 
-    const {id, title, done} = item;
+    const [itemState, setItemState] = useState({item:item});
 
+    const {id, title, done} = itemState.item;
+    // console.log('itemState:', itemState);
 
-    //삭제 이벤트 핸들러
+    // 삭제 이벤트 핸들러
     const removeHandler = e => {
-        console.log(item);
-        remove(item);
+        // console.log(item);
+        remove(itemState.item);
+    };
+
+    
+
+    // 체크박스 체인지 이벤트 핸들러
+    const checkHandler = e => {
+        // console.log('체크박스 버튼 누름1');
+        const thisItem = itemState.item;
+        thisItem.done = !thisItem.done;
+        setItemState({...itemState, thisItem});
+        update(itemState.item);
     };
 
 
     return (
         <ListItem>
-            <Checkbox checked={done} />
+            <Checkbox checked={done} onChange={checkHandler} />
             <ListItemText>
                 <InputBase
                     inputProps={{"aria-label" : "naked"}}
                     type="text"
-                    id={id}
-                    name={id}
+                    id={id.toString()}
+                    name={id.toString()}
                     value={title}
                     multiline={true}
                     fullWidth={true}
@@ -37,7 +50,7 @@ const Todo = ({ item, remove }) => {
             </ListItemText>
             {/* 삭제 버튼 */}
             <ListItemSecondaryAction>
-                <IconButton aria-label="Delete Todo"  onClick={removeHandler}>
+                <IconButton aria-label="Delete Todo" onClick={removeHandler}>
                     <DeleteOutline/>
                 </IconButton>
             </ListItemSecondaryAction>
